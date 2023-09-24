@@ -1,1 +1,21 @@
+server:
+  port: 8081
 
+spring:
+  application:
+    name: user-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/ice_users
+    username: root
+    password: test1234
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+greeting:
+  message: Welcome to the Ice-Americano Page

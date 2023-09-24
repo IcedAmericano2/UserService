@@ -14,7 +14,7 @@ public class UserEntity {
 
     @Column(name = "product_id") // 외래 키 필드 추가
     private Long product_id;
-    
+
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 

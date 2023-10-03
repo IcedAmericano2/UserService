@@ -19,3 +19,5 @@ spring:
 
 greeting:
   message: Welcome to the Ice-Americano Page
+
+secretKey: amazing

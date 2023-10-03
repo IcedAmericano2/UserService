@@ -1,14 +1,15 @@
 package com.example.UserService.service;
 
 import com.example.UserService.domain.UserEntity;
-import com.example.UserService.dto.UserDto;
-import com.example.UserService.vo.ResponseUser;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import com.example.UserService.dto.JWTAuthResponse;
+import com.example.UserService.vo.RequestLogin;
+import com.example.UserService.vo.RequestUser;
 
 import java.util.Optional;
 
-public interface UserService extends UserDetailsService {
+public interface UserService{
 
-    ResponseUser createUser(UserDto userDto);
     Optional<UserEntity> findOne(String email);
+    JWTAuthResponse login(RequestLogin requestLogin);
+    String register(RequestUser requestUser);
 }

@@ -1,5 +1,6 @@
 package com.example.UserService.controller;
 
+import com.example.UserService.dto.JWTAuthResponse;
 import com.example.UserService.dto.UserDto;
 import com.example.UserService.service.UserService;
 import com.example.UserService.vo.RequestLogin;
@@ -31,14 +32,22 @@ public class UserController {
         return env.getProperty("greeting.message");
     }
 
-    @PostMapping("/join")
-    public ResponseEntity createUser(@RequestBody RequestUser user){
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        UserDto userDto = mapper.map(user, UserDto.class);
-        ResponseUser responseUser = userService.createUser(userDto);
+    @GetMapping("/view")
+    public String view() {
+        return "redirect:http://localhost:3000";
+    }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
+    @PostMapping("/login")
+    public ResponseEntity<JWTAuthResponse> login(@RequestBody RequestLogin requestLogin){
+        JWTAuthResponse token = userService.login(requestLogin);
+        return ResponseEntity.ok(token);
+    }
+
+    // Build Register REST API
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RequestUser requestUser){
+        String response = userService.register(requestUser);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 }

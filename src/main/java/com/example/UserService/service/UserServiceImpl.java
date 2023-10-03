@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService{
                 requestLogin.getEmail(), requestLogin.getPwd()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        JWTAuthResponse token = jwtTokenProvider.generateToken(authentication);
+        JWTAuthResponse token = jwtTokenProvider.generateToken(requestLogin.getEmail());
         return token;
     }
 

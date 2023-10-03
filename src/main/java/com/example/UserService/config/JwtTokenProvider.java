@@ -40,14 +40,16 @@ public class JwtTokenProvider {
     }
 
     // generate JWT token
-    public JWTAuthResponse generateToken(Authentication authentication) {
-        String username = authentication.getName();
+    public JWTAuthResponse generateToken(String email) {
+        Claims claims = Jwts.claims().setSubject("Auth");
+        claims.put("email", email);
+
         Date currentDate = new Date();
         Date accessTokenExpireDate = new Date(currentDate.getTime() + ACCESS_TOKEN_VALID_TIME);
         Date refreshTokenExpireDate = new Date(currentDate.getTime() + REFRESH_TOKEN_VALID_TIME);
 
         String accessToken = Jwts.builder()
-                .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(currentDate)
                 .setExpiration(accessTokenExpireDate)
                 .signWith(SignatureAlgorithm.HS256, secretKey)

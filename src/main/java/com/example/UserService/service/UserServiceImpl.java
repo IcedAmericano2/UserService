@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService{
                 requestLogin.getEmail(), requestLogin.getPwd()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        JWTAuthResponse token = jwtTokenProvider.generateToken(requestLogin.getEmail());
+        JWTAuthResponse token = jwtTokenProvider.generateToken(requestLogin.getEmail(), authentication);
         return token;
     }
 
@@ -78,12 +78,4 @@ public class UserServiceImpl implements UserService{
 
         return "User registered successfully!.";
     }
-
-//    private void validateDuplicateMember(UserEntity userEntity) {
-//        userRepository.findByEmail(userEntity.getEmail())
-//                .ifPresent(m ->{
-//                    throw new IllegalStateException("이미 존재하는 회원입니다.");
-//                });
-//    }
-
 }

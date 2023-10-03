@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,9 +41,11 @@ public class JwtTokenProvider {
     }
 
     // generate JWT token
-    public JWTAuthResponse generateToken(String email) {
-        Claims claims = Jwts.claims().setSubject("Auth");
-        claims.put("email", email);
+    public JWTAuthResponse generateToken(String email, Authentication authentication) {
+        String username = authentication.getName();
+
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("username", username);
 
         Date currentDate = new Date();
         Date accessTokenExpireDate = new Date(currentDate.getTime() + ACCESS_TOKEN_VALID_TIME);
@@ -69,7 +72,7 @@ public class JwtTokenProvider {
         return response;
     }
 
-    public String getUsername(String token) {
+    public String getEmail(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
@@ -78,13 +81,17 @@ public class JwtTokenProvider {
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 사용자 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUsername(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getEmail(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", new ArrayList<>());
     }
 
     // Request의 Header로부터 토큰 값 조회
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return bearerToken;
     }
 
     // 토큰의 유효성 검증

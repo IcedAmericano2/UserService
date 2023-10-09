@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  database:
+    container_name: mysql_db
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ice_users
+      MYSQL_ROOT_PASSWORD: test1234
+      MYSQL_ROOT_HOST: '%'
+      TZ: 'Asia/Seoul'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d # MySQL 설정 파일 위치
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+
+  application:
+    container_name: springboot-test
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/ice_users?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME:
+      SPRING_DATASOURCE_PASSWORD: test1234
+    depends_on:
+      - database

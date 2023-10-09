@@ -47,6 +47,9 @@ dependencies {
 	implementation 'javax.xml.bind:jaxb-api:2.3.0'
 	implementation 'org.webjars.npm:jsonwebtoken:8.5.1'
 
+	//eureka
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.9.RELEASE'
+
 	//lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

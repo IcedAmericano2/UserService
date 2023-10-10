@@ -5,7 +5,7 @@ services:
     container_name: mysql_db
     image: mysql:8.0
     environment:
-      MYSQL_DATABASE: ice_users
+      MYSQL_DATABASE: icedb
       MYSQL_ROOT_PASSWORD: test1234
       MYSQL_ROOT_HOST: '%'
       TZ: 'Asia/Seoul'
@@ -24,8 +24,8 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/ice_users?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME:
-      SPRING_DATASOURCE_PASSWORD: test1234
+      SPRING_DATASOURCE_URL: jdbc:mysql://database-2.cksxigummbi6.ap-northeast-2.rds.amazonaws.com:3306/icedb?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin1234
     depends_on:
       - database

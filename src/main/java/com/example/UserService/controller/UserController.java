@@ -33,13 +33,14 @@ public class UserController {
         return "redirect:http://localhost:3000";
     }
 
+    @CrossOrigin("http://13.124.68.5")
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponse> login(@RequestBody RequestLogin requestLogin){
         JWTAuthResponse token = userService.login(requestLogin);
         return ResponseEntity.ok(token);
     }
 
-    // Build Register REST API
+    @CrossOrigin("http://13.124.68.5")
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RequestUser requestUser){
         String response = userService.register(requestUser);

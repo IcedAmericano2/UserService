@@ -33,14 +33,12 @@ public class UserController {
         return "redirect:http://localhost:3000";
     }
 
-    @CrossOrigin(origins = "/**")
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponse> login(@RequestBody RequestLogin requestLogin){
         JWTAuthResponse token = userService.login(requestLogin);
         return ResponseEntity.ok(token);
     }
 
-    @CrossOrigin(origins = "/**")
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RequestUser requestUser){
         String response = userService.register(requestUser);

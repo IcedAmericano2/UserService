@@ -20,7 +20,7 @@ public class CorsConfig {
         config.setAllowedOrigins(List.of("http://localhost:3000","http://13.124.68.5"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setExposedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Authorization"));
         source.registerCorsConfiguration("/**", config);
 
         return new CorsFilter(source);

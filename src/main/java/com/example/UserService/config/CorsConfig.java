@@ -17,7 +17,9 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:3000","http://13.124.68.5"));
+        config.addAllowedOriginPattern("http://15.164.100.22:8081"); //특정 패턴 Origin만 허용
+        config.addAllowedOriginPattern("http://13.124.68.5");
+//        config.setAllowedOrigins(List.of("http://localhost:3000","http://13.124.68.5"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));

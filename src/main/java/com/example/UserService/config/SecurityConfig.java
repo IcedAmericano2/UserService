@@ -55,7 +55,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.OPTIONS, WHITE_LIST).permitAll()
+                        .requestMatchers(WHITE_LIST).permitAll()
                         .anyRequest().authenticated() //어떠한 요청이라도 인증 필요
                 )
                 .exceptionHandling(exception -> exception

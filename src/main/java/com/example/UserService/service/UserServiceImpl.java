@@ -2,8 +2,8 @@ package com.example.UserService.service;
 
 import com.example.UserService.config.JwtTokenProvider;
 import com.example.UserService.dto.JWTAuthResponse;
-import com.example.UserService.dto.UserDto;
 import com.example.UserService.domain.UserEntity;
+import com.example.UserService.dto.UserResponse;
 import com.example.UserService.exception.BlogAPIException;
 import com.example.UserService.repository.UserRepository;
 import com.example.UserService.vo.RequestLogin;
@@ -13,14 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,4 +74,10 @@ public class UserServiceImpl implements UserService{
 
         return "User registered successfully!.";
     }
+
+    @Override
+    public UserResponse findUserResponseByEmail(String email) {
+        return userRepository.findUserResponseByEmail(email);
+    }
+
 }

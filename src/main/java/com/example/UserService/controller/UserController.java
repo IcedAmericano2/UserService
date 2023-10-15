@@ -1,6 +1,7 @@
 package com.example.UserService.controller;
 
 import com.example.UserService.dto.JWTAuthResponse;
+import com.example.UserService.dto.UserResponse;
 import com.example.UserService.service.UserService;
 import com.example.UserService.vo.RequestLogin;
 import com.example.UserService.vo.RequestUser;
@@ -45,5 +46,10 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @GetMapping("/response_user/{email}")
+    public ResponseEntity<UserResponse> getResponseUser(@PathVariable String email) {
+        UserResponse userResponse = userService.findUserResponseByEmail(email);
+        return ResponseEntity.ok().body(userResponse);
+    }
 }
 

@@ -22,7 +22,7 @@ services:
     container_name: springboot-test
     build: .
     ports:
-      - "8081:8081"
+      - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://database-2.cksxigummbi6.ap-northeast-2.rds.amazonaws.com:3306/icedb?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: admin

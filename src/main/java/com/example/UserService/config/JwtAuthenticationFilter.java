@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 토큰이 필요 없으므로 여기에서 토큰 관련 검사를 수행하지 않음
         }
         else{
-            // get JWT token from http request
+             //get JWT token from http request
             String token = jwtTokenProvider.resolveToken(request);
 
             // validate token

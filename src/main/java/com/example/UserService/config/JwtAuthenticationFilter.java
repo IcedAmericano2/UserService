@@ -23,12 +23,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
-            // OPTIONS 요청에 대한 처리 (예: CORS 관련 헤더 설정)
-            // 토큰이 필요 없으므로 여기에서 토큰 관련 검사를 수행하지 않음
-        }
-        else{
-            // get JWT token from http request
+//        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+//            // OPTIONS 요청에 대한 처리 (예: CORS 관련 헤더 설정)
+//            // 토큰이 필요 없으므로 여기에서 토큰 관련 검사를 수행하지 않음
+//        }
+//        else{
+             //get JWT token from http request
             String token = jwtTokenProvider.resolveToken(request);
 
             // validate token
@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             }
-        }
+//        }
         filterChain.doFilter(request, response);
     }
 

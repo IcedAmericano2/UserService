@@ -29,11 +29,6 @@ public class UserController {
         return env.getProperty("greeting.message");
     }
 
-    @GetMapping("/view")
-    public String view() {
-        return "redirect:http://localhost:3000";
-    }
-
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponse> login(@RequestBody RequestLogin requestLogin){
         JWTAuthResponse token = userService.login(requestLogin);

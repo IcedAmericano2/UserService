@@ -49,10 +49,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String register(RequestUser requestUser) {
-//        // add check for username exists in database
-//        if(userRepository.findByEmail(requestUser.getUsername())){
-//            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Username is already exists!.");
-//        }
 
         // add check for email exists in database
         if(userRepository.existsByEmail(requestUser.getEmail())){

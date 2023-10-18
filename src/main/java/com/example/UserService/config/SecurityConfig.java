@@ -20,7 +20,6 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
-    private final CorsConfig corsConfig;
 
     private static final String[] WHITE_LIST = {
             "/user-service/**",

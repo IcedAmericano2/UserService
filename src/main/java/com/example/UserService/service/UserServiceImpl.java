@@ -8,7 +8,6 @@ import com.example.UserService.exception.BlogAPIException;
 import com.example.UserService.repository.UserRepository;
 import com.example.UserService.vo.RequestLogin;
 import com.example.UserService.vo.RequestUser;
-import com.example.UserService.vo.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -72,8 +71,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponse findUserResponseByEmail(String email) {
-        return userRepository.findUserResponseByEmail(email);
+    public UserResponse getUserResponse(Long userId) {
+        return userRepository.findUserResponseByUserId(userId);
     }
-
 }

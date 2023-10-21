@@ -12,8 +12,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Boolean existsByEmail(String email);
 
-    default UserResponse findUserResponseByEmail(String email) {
-        Optional<UserEntity> userEntityOptional = findByEmail(email);
+    Optional<UserEntity> findById(Long userId);
+
+    default UserResponse findUserResponseByUserId(Long userId) {
+        Optional<UserEntity> userEntityOptional = findById(userId);
         UserEntity userEntity = userEntityOptional.get();
         return new UserResponse(
                 userEntity.getId(),
@@ -22,4 +24,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
                 userEntity.getPhoneNumber(),
                 userEntity.isApproved());
         }
+
 }

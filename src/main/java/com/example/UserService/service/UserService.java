@@ -13,5 +13,5 @@ public interface UserService{
     Optional<UserEntity> findOne(String email);
     JWTAuthResponse login(RequestLogin requestLogin);
     String register(RequestUser requestUser);
-    UserResponse findUserResponseByEmail(String email);
+    UserResponse getUserResponse(Long userId);
 }

@@ -41,10 +41,11 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/response_user/{email}")
-    public ResponseEntity<UserResponse> getResponseUser(@PathVariable("email") String email) {
-        UserResponse userResponse = userService.findUserResponseByEmail(email);
+    @GetMapping("/response_user/{userId}")
+    public ResponseEntity<UserResponse> getResponseUser(@PathVariable("userId") Long userId) {
+        UserResponse userResponse = userService.getUserResponse(userId);
         return ResponseEntity.ok().body(userResponse);
     }
+
 }
 

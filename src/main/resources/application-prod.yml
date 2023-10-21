@@ -1,0 +1,40 @@
+server:
+  port: 8081
+
+#spring:
+#  profiles:
+#    active: prod
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  application:
+    name: user-service
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/ice_users
+      username: root
+      password: test1234
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+greeting:
+  message: Welcome to the Ice-Americano Page
+
+secretKey: amazing

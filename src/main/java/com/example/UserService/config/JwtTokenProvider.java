@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -40,11 +41,12 @@ public class JwtTokenProvider {
     }
 
     // generate JWT token
-    public JWTAuthResponse generateToken(String email, Authentication authentication) {
+    public JWTAuthResponse generateToken(String email, Authentication authentication, Long userId) {
         String username = authentication.getName();
 
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("username", username);
+        claims.put("userId", userId);
 
         Date currentDate = new Date();
         Date accessTokenExpireDate = new Date(currentDate.getTime() + ACCESS_TOKEN_VALID_TIME);

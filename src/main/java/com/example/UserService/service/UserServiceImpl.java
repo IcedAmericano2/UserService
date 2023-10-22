@@ -1,6 +1,7 @@
 package com.example.UserService.service;
 
 import com.example.UserService.config.JwtTokenProvider;
+import com.example.UserService.config.MyUserDetailsService;
 import com.example.UserService.dto.JWTAuthResponse;
 import com.example.UserService.domain.UserEntity;
 import com.example.UserService.dto.UserResponse;
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService{
     private final BCryptPasswordEncoder pwdEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MyUserDetailsService myUserDetailsService;
 
     @Override
     public Optional<UserEntity> findOne(String email) {
@@ -42,7 +44,8 @@ public class UserServiceImpl implements UserService{
                 requestLogin.getEmail(), requestLogin.getPwd()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        JWTAuthResponse token = jwtTokenProvider.generateToken(requestLogin.getEmail(), authentication);
+        Long userId = myUserDetailsService.findUserIdByEmail(requestLogin.getEmail());
+        JWTAuthResponse token = jwtTokenProvider.generateToken(requestLogin.getEmail(), authentication, userId);
         return token;
     }
 

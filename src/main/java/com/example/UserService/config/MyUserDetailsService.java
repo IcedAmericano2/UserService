@@ -30,4 +30,10 @@ public class MyUserDetailsService implements UserDetailsService {
                 .build();
     }
 
+    public Long findUserIdByEmail(String email) {
+        Optional<UserEntity> findOne = userRepository.findByEmail(email);
+        UserEntity userEntity = findOne.orElseThrow(() -> new UsernameNotFoundException("없는 회원입니다"));
+
+        return userEntity.getId();
+    }
 }

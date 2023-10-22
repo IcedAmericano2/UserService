@@ -6,6 +6,6 @@ FROM openjdk:19-jdk
 ARG JAR_FILE=build/libs/*.jar
 #Jar File Copy
 COPY ${JAR_FILE} ice_users.jar
-ENTRYPOINT ["java", "-jar", "/ice_users.jar"]
-#ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "/ice_users.jar"]
+#ENTRYPOINT ["java", "-jar", "/ice_users.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "/ice_users.jar"]
 

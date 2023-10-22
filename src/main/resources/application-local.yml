@@ -25,7 +25,6 @@ spring.datasource:
   password: test12
   driver-class-name: org.postgresql.Driver
 
-
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

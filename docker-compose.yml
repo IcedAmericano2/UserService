@@ -27,5 +27,6 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://database-2.cksxigummbi6.ap-northeast-2.rds.amazonaws.com:3306/icedb?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin1234
+      SPRING_PROFILES_ACTIVE: prod
     depends_on:
       - database

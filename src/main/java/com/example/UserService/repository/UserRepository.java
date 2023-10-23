@@ -25,4 +25,14 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
                 userEntity.isApproved());
         }
 
+    default UserResponse findUserResponseByEmail(String email) {
+        Optional<UserEntity> userEntityOptional = findByEmail(email);
+        UserEntity userEntity = userEntityOptional.get();
+        return new UserResponse(
+                userEntity.getId(),
+                userEntity.getEmail(),
+                userEntity.getName(),
+                userEntity.getPhoneNumber(),
+                userEntity.isApproved());
+    }
 }

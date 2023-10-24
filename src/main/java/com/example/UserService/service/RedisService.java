@@ -2,11 +2,15 @@ package com.example.UserService.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -14,21 +18,50 @@ import java.time.Duration;
 public class RedisService {
     private final RedisTemplate redisTemplate;
 
-    // 키-벨류 설정
-    public void setValues(String token, String email){
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
-//        values.set(name, age);
-        values.set(token, email, Duration.ofMinutes(3));  // 3분 뒤 메모리에서 삭제된다.
+    public void setValues(String key, String data) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        values.set(key, data);
     }
 
-    // 키값으로 벨류 가져오기
-    public String getValues(String token){
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
-        return values.get(token);
+    public void setValues(String key, String data, Duration duration) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        values.set(key, data, duration);
     }
 
-    // 키-벨류 삭제
-    public void delValues(String token) {
-        redisTemplate.delete(token.substring(7));
+    @Transactional(readOnly = true)
+    public String getValues(String key) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        if (values.get(key) == null) {
+            return "false";
+        }
+        return (String) values.get(key);
+    }
+
+    public void deleteValues(String key) {
+        redisTemplate.delete(key);
+    }
+
+    public void expireValues(String key, int timeout) {
+        redisTemplate.expire(key, timeout, TimeUnit.MILLISECONDS);
+    }
+
+    public void setHashOps(String key, Map<String, String> data) {
+        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+        values.putAll(key, data);
+    }
+
+    @Transactional(readOnly = true)
+    public String getHashOps(String key, String hashKey) {
+        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+        return Boolean.TRUE.equals(values.hasKey(key, hashKey)) ? (String) redisTemplate.opsForHash().get(key, hashKey) : "";
+    }
+
+    public void deleteHashOps(String key, String hashKey) {
+        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+        values.delete(key, hashKey);
+    }
+
+    public boolean checkExistsValue(String value) {
+        return !value.equals("false");
     }
 }

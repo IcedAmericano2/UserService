@@ -8,6 +8,10 @@ spring:
   application:
     name: User-Service
 
+  redis:
+    host: localhost
+    port: 6380
+
   jpa:
     database: postgresql
     hibernate:

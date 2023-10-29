@@ -29,8 +29,8 @@ public class JwtTokenProvider {
     // Refresh Token 유효 기간 14일 (ms 단위)
     private final Long REFRESH_TOKEN_VALID_TIME = 14 * 1440 * 60 * 1000L;
 
-    // Access Token 유효 기간 15분
-    private final Long ACCESS_TOKEN_VALID_TIME = 15 * 60 * 1000L;
+    // Access Token 유효 기간 360분
+    private final Long ACCESS_TOKEN_VALID_TIME = 360 * 60 * 1000L;
 
     private final MyUserDetailsService userDetailsService;
 

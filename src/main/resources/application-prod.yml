@@ -5,6 +5,10 @@ spring:
   config:
     activate:
       on-profile: prod
+  data:
+    redis:
+      host: localhost
+      port: 6379
   application:
     name: User-Service
     datasource:
@@ -19,9 +23,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  redis:
-    host: localhost
-    port: 6380
 
 eureka:
   instance:

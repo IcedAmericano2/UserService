@@ -1,6 +1,7 @@
 package com.example.UserService.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 @Getter
 @Entity
 @Table(name = "users")
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
@@ -42,6 +44,9 @@ public class UserEntity {
         this.phoneNumber = phoneNumber;
         this.encryptedPwd = encryptedPwd;
         this.isApproved = isApproved;
+    }
+
+    public UserEntity() {
     }
 
     public static UserEntity of(Optional<UserEntity> userEntity) {

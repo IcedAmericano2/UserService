@@ -11,8 +11,14 @@ import java.util.Optional;
 public interface UserService{
 
     Optional<UserEntity> findOne(String email);
+
     JWTAuthResponse login(RequestLogin requestLogin);
+
     String register(RequestUser requestUser);
+
     UserResponse getUserResponseByUserId(Long userId);
+
     UserResponse findUserResponseByEmail(String email);
+
+    JWTAuthResponse reissueAccessToken(String encryptedRefreshToken);
 }

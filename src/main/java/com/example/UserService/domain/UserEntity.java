@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Setter
 @Getter
 @Entity
@@ -31,4 +33,19 @@ public class UserEntity {
 
     @Column(nullable = false)
     private boolean isApproved;
+
+    private UserEntity(Optional<UserEntity> userEntity) {
+        this.id = id;
+        this.product_id = product_id;
+        this.email = email;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.encryptedPwd = encryptedPwd;
+        this.isApproved = isApproved;
+    }
+
+    public static UserEntity of(Optional<UserEntity> userEntity) {
+        return new UserEntity(userEntity);
+    }
+
 }

@@ -6,6 +6,8 @@ import com.example.UserService.dto.JWTAuthResponse;
 import com.example.UserService.domain.UserEntity;
 import com.example.UserService.dto.UserResponse;
 import com.example.UserService.exception.BlogAPIException;
+import com.example.UserService.exception.BusinessLogicException;
+import com.example.UserService.exception.ExceptionCode;
 import com.example.UserService.repository.UserRepository;
 import com.example.UserService.vo.RequestLogin;
 import com.example.UserService.vo.RequestUser;
@@ -32,6 +34,7 @@ public class UserServiceImpl implements UserService{
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final MyUserDetailsService myUserDetailsService;
+    private final RedisService redisService;
 
     @Override
     public Optional<UserEntity> findOne(String email) {
@@ -62,12 +65,6 @@ public class UserServiceImpl implements UserService{
         UserEntity userEntity = mapper.map(requestUser, UserEntity.class);
         userEntity.setEncryptedPwd(pwdEncoder.encode(requestUser.getPwd()));
         userEntity.setApproved(false);
-
-//        Set<Role> roles = new HashSet<>();
-//        Role userRole = roleRepository.findByName("ROLE_USER").get();
-//        roles.add(userRole);
-//        user.setRoles(roles);
-
         userRepository.save(userEntity);
 
         return "User registered successfully!.";
@@ -83,4 +80,25 @@ public class UserServiceImpl implements UserService{
         return userRepository.findUserResponseByEmail(email);
     }
 
+    @Override
+    public JWTAuthResponse reissueAccessToken(String refreshToken) {
+        this.verifiedRefreshToken(refreshToken);
+        String email = jwtTokenProvider.getEmail(refreshToken);
+        String redisRefreshToken = redisService.getValues(email);
+
+        if (redisService.checkExistsValue(redisRefreshToken) && refreshToken.equals(redisRefreshToken)) {
+            Optional<UserEntity> findUser = this.findOne(email);
+            UserEntity userEntity = UserEntity.of(findUser);
+            JWTAuthResponse tokenDto = jwtTokenProvider.generateToken(email, jwtTokenProvider.getAuthentication(refreshToken), userEntity.getId());
+            String newAccessToken = tokenDto.getAccessToken();
+            long refreshTokenExpirationMillis = jwtTokenProvider.getRefreshTokenExpirationMillis();
+            return tokenDto;
+        } else throw new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_SAME);
+    }
+
+    private void verifiedRefreshToken(String refreshToken) {
+        if (refreshToken == null) {
+            throw new BusinessLogicException(ExceptionCode.HEADER_REFRESH_TOKEN_NOT_EXISTS);
+        }
+    }
 }

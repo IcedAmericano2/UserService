@@ -1,10 +1,13 @@
 package com.example.UserService.controller;
 
+import com.example.UserService.config.JwtTokenProvider;
 import com.example.UserService.dto.JWTAuthResponse;
 import com.example.UserService.dto.UserResponse;
 import com.example.UserService.service.UserService;
 import com.example.UserService.vo.RequestLogin;
 import com.example.UserService.vo.RequestUser;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,7 @@ public class UserController {
 
     private final Environment env;
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/health_check")
     public String status(){
@@ -53,5 +57,13 @@ public class UserController {
         return ResponseEntity.ok().body(userResponse);
     }
 
+    @PatchMapping("/reissue")
+    public ResponseEntity<JWTAuthResponse> reissue(HttpServletRequest request,
+                                  HttpServletResponse response) {
+
+        String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
+        JWTAuthResponse newAccessToken = userService.reissueAccessToken(refreshToken);
+        return ResponseEntity.ok(newAccessToken);
+    }
 }
 

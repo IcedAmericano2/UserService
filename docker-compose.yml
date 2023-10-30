@@ -30,3 +30,11 @@ services:
       SPRING_PROFILES_ACTIVE: prod
     depends_on:
       - database
+
+  redis:
+    image: redis
+    container_name: token-redis
+    restart: always
+    hostname: redis
+    ports:
+      - 6379:6379

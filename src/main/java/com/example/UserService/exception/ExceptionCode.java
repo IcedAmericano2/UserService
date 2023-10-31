@@ -10,6 +10,9 @@ public enum ExceptionCode {
     FORBIDDEN(403, "Forbidden"),
     INVALID_INPUT(422, "Invalid Input"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
+    MEMBER_EXISTS(409, "Member already exists"),
+    NO_SUCH_ALGORITHM(500, "No such algorithm available"),
+    UNABLE_TO_SEND_EMAIL(500, "Unable to send email"),
     TOKEN_IS_NOT_SAME(401, "Access Token and Refresh Token do not match"),
     HEADER_REFRESH_TOKEN_NOT_EXISTS(400, "Refresh Token missing in request header");
 

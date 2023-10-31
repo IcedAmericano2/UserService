@@ -18,7 +18,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -33,8 +32,8 @@ public class JwtTokenProvider {
     // Refresh Token 유효 기간 14일 (ms 단위)
     private final Long REFRESH_TOKEN_VALID_TIME = 14 * 1440 * 60 * 1000L;
 
-    // Access Token 유효 기간 360분
-    private final Long ACCESS_TOKEN_VALID_TIME = 1 * 60 * 1000L;
+    // Access Token 유효 기간 30분
+    private final Long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L;
 
     private final MyUserDetailsService userDetailsService;
 
@@ -67,18 +66,13 @@ public class JwtTokenProvider {
                 .compact();
 
         String refreshToken = Jwts.builder()
+                .setClaims(claims)
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setExpiration(refreshTokenExpireDate)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
         redisService.setValues(email, refreshToken, Duration.ofMillis(REFRESH_TOKEN_VALID_TIME));
-//        redisTemplate.opsForValue().set(
-//                authentication.getName(),
-//                refreshToken,
-//                REFRESH_TOKEN_VALID_TIME,
-//                TimeUnit.MILLISECONDS
-//        );
 
         JWTAuthResponse response = new JWTAuthResponse();
         response.setAccessToken(accessToken);

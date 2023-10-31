@@ -37,7 +37,6 @@ public class JwtTokenProvider {
 
     private final MyUserDetailsService userDetailsService;
 
-    private final RedisTemplate<String, String> redisTemplate;
     private final RedisService redisService;
 
     // 의존성 주입이 완료된 후에 실행되는 메소드, secretKey를 Base64로 인코딩한다.

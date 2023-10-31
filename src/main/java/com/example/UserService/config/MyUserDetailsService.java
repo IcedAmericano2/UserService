@@ -39,7 +39,4 @@ public class MyUserDetailsService implements UserDetailsService {
         return userEntity.getId();
     }
 
-    private UserEntity createUserDetails(UserEntity userEntity) {
-        return UserEntity.of(Optional.ofNullable(userEntity));
-    }
 }

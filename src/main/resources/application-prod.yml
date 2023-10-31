@@ -5,10 +5,12 @@ spring:
   config:
     activate:
       on-profile: prod
+
   data:
     redis:
       host: localhost
       port: 6379
+
   application:
     name: User-Service
     datasource:
@@ -16,6 +18,7 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/ice_users
       username: root
       password: test1234
+
   jpa:
     show-sql: true
     hibernate:

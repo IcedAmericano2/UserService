@@ -31,6 +31,23 @@ spring:
     password: test12
     driver-class-name: org.postgresql.Driver
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: iceAmericano122@gmail.com
+    password: dbycouqvzmlpfbqz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connection-timeout: 5000
+          timeout: 5000
+          write timeout: 5000
+    auth-code-expiration-millis: 1800000 # 30분
+
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

@@ -1,6 +1,7 @@
 package com.example.UserService.controller;
 
 import com.example.UserService.config.JwtTokenProvider;
+import com.example.UserService.dto.EmailVerificationResult;
 import com.example.UserService.dto.JWTAuthResponse;
 import com.example.UserService.dto.UserResponse;
 import com.example.UserService.service.UserService;
@@ -8,6 +9,7 @@ import com.example.UserService.vo.RequestLogin;
 import com.example.UserService.vo.RequestUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -64,6 +66,21 @@ public class UserController {
         String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
         JWTAuthResponse newAccessToken = userService.reissueAccessToken(refreshToken);
         return ResponseEntity.ok(newAccessToken);
+    }
+
+    @PostMapping("/emails/verification-requests")
+    public ResponseEntity sendMessage(@RequestParam("email") @Valid String email) {
+
+        userService.sendCodeToEmail(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/emails/verifications")
+    public ResponseEntity verificationEmail(@RequestParam("email") @Valid String email,
+                                            @RequestParam("code") String authCode) {
+        EmailVerificationResult response = userService.verifiedCode(email, authCode);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
 

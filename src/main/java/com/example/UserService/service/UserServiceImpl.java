@@ -2,6 +2,7 @@ package com.example.UserService.service;
 
 import com.example.UserService.config.JwtTokenProvider;
 import com.example.UserService.config.MyUserDetailsService;
+import com.example.UserService.dto.EmailVerificationResult;
 import com.example.UserService.dto.JWTAuthResponse;
 import com.example.UserService.domain.UserEntity;
 import com.example.UserService.dto.UserResponse;
@@ -12,8 +13,10 @@ import com.example.UserService.repository.UserRepository;
 import com.example.UserService.vo.RequestLogin;
 import com.example.UserService.vo.RequestUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,20 +24,31 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.time.Duration;
 import java.util.Optional;
+import java.util.Random;
 
-
+@Slf4j
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
+    private static final String AUTH_CODE_PREFIX = "AuthCode ";
+    private final MailService mailService;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder pwdEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final MyUserDetailsService myUserDetailsService;
     private final RedisService redisService;
+
+    @Value("${spring.mail.auth-code-expiration-millis}")
+    private long authCodeExpirationMillis;
 
     @Override
     public Optional<UserEntity> findOne(String email) {
@@ -100,5 +114,47 @@ public class UserServiceImpl implements UserService{
         if (refreshToken == null) {
             throw new BusinessLogicException(ExceptionCode.HEADER_REFRESH_TOKEN_NOT_EXISTS);
         }
+    }
+
+    //이메일 인증번호 관련 메소드
+    public void sendCodeToEmail(String toEmail) {
+        this.checkDuplicatedEmail(toEmail);
+        String title = "STUDIO_i 이메일 인증 번호";
+        String authCode = this.createCode();
+        mailService.sendEmail(toEmail, title, authCode);
+        // 이메일 인증 요청 시 인증 번호 Redis에 저장 ( key = "AuthCode " + Email / value = AuthCode )
+        redisService.setValues(AUTH_CODE_PREFIX + toEmail,
+                authCode, Duration.ofMillis(this.authCodeExpirationMillis));
+    }
+
+    private void checkDuplicatedEmail(String email) {
+        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        if (userEntity.isPresent()) {
+            log.debug("UserServiceImpl.checkDuplicatedEmail exception occur email: {}", email);
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+        }
+    }
+
+    private String createCode() {
+        int lenth = 6;
+        try {
+            Random random = SecureRandom.getInstanceStrong();
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < lenth; i++) {
+                builder.append(random.nextInt(10));
+            }
+            return builder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            log.debug("MemberService.createCode() exception occur");
+            throw new BusinessLogicException(ExceptionCode.NO_SUCH_ALGORITHM);
+        }
+    }
+
+    public EmailVerificationResult verifiedCode(String email, String authCode) {
+        this.checkDuplicatedEmail(email);
+        String redisAuthCode = redisService.getValues(AUTH_CODE_PREFIX + email);
+        boolean authResult = redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(authCode);
+
+        return EmailVerificationResult.of(authResult);
     }
 }

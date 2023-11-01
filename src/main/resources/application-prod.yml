@@ -47,6 +47,7 @@ spring:
 
 eureka:
   instance:
+    host: 52.78.155.253
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: true

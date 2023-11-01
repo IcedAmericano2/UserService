@@ -1,7 +1,6 @@
 #Docker file
 
-#jdk 19 Image Start
-FROM openjdk:19-jdk
+FROM openjdk:17
 #인자 정리 - Jar
 ARG JAR_FILE=build/libs/*.jar
 #Jar File Copy

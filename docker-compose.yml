@@ -18,19 +18,6 @@ services:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
 
-  application:
-    container_name: springboot-test
-    build: .
-    ports:
-      - "8081:8081"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://database-2.cksxigummbi6.ap-northeast-2.rds.amazonaws.com:3306/icedb?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: admin1234
-      SPRING_PROFILES_ACTIVE: prod
-    depends_on:
-      - database
-
   redis:
     image: redis
     container_name: token-redis

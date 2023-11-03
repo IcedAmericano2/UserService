@@ -6,7 +6,7 @@ spring:
     activate:
       on-profile: prod
 
-  redis: # Redis 접속 정보
+  redis:
     host: redis
     port: 6379
 

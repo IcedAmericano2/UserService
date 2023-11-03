@@ -127,6 +127,7 @@ public class UserServiceImpl implements UserService{
                 authCode, Duration.ofMillis(this.authCodeExpirationMillis));
     }
 
+    //중복 이메일 체크
     private void checkDuplicatedEmail(String email) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
         if (userEntity.isPresent()) {
@@ -135,6 +136,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    //랜덤 인증번호 생성
     private String createCode() {
         int lenth = 6;
         try {
@@ -150,6 +152,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    //인증번호 확인
     public EmailVerificationResult verifiedCode(String email, String authCode) {
         this.checkDuplicatedEmail(email);
         String redisAuthCode = redisService.getValues(AUTH_CODE_PREFIX + email);

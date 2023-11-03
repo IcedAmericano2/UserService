@@ -81,7 +81,7 @@ public class JwtTokenProvider {
         return response;
     }
 
-    // Token 복호화 및 예외 발생(토큰 만료, 시그니처 오류)시 Claims 객체가 안만들어짐.
+    // Token 복호화 및 예외 발생(토큰 만료, 시그니처 오류)시 Claims 객체가 안만들어짐
     public Claims parseClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)

@@ -78,8 +78,8 @@ public class UserController {
     @GetMapping("/emails/verifications")
     public ResponseEntity verificationEmail(@RequestParam("email") @Valid String email,
                                             @RequestParam("code") String authCode) {
-        EmailVerificationResult response = userService.verifiedCode(email, authCode);
 
+        EmailVerificationResult response = userService.verifiedCode(email, authCode);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

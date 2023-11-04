@@ -64,8 +64,15 @@ public class UserController {
 
     @GetMapping("/response_userByEmail/{email}")
     public ResponseEntity<UserResponse> findUserResponseByEmail(@PathVariable String email) {
-        UserResponse userResponse = userService.findUserResponseByEmail(email);
-        return ResponseEntity.ok().body(userResponse);
+        try {
+            UserResponse userResponse = userService.findUserResponseByEmail(email);
+            return ResponseEntity.ok().body(userResponse);
+        } catch (BusinessLogicException e) {
+            ExceptionCode exceptionCode = e.getExceptionCode();
+            int status = exceptionCode.getStatus();
+            String message = exceptionCode.getMessage();
+            return ResponseEntity.status(status).body(new UserResponse(message));
+        }
     }
 
     @PatchMapping("/reissue")

@@ -87,17 +87,19 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserResponse getUserResponseByUserId(Long userId) {
         UserResponse userResponse = userRepository.findUserResponseByUserId(userId);
-
         if (userResponse == null) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
-
         return userResponse;
     }
 
     @Override
     public UserResponse findUserResponseByEmail(String email) {
-        return userRepository.findUserResponseByEmail(email);
+        UserResponse userResponse = userRepository.findUserResponseByEmail(email);
+        if (userResponse == null) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+        return userResponse;
     }
 
     @Override

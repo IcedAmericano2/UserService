@@ -4,6 +4,8 @@ import com.example.UserService.config.JwtTokenProvider;
 import com.example.UserService.dto.EmailVerificationResult;
 import com.example.UserService.dto.JWTAuthResponse;
 import com.example.UserService.dto.UserResponse;
+import com.example.UserService.exception.BusinessLogicException;
+import com.example.UserService.exception.ExceptionCode;
 import com.example.UserService.service.UserService;
 import com.example.UserService.vo.RequestLogin;
 import com.example.UserService.vo.RequestUser;
@@ -49,8 +51,15 @@ public class UserController {
 
     @GetMapping("/response_userById/{userId}")
     public ResponseEntity<UserResponse> findUserResponseByUserId(@PathVariable("userId") Long userId) {
-        UserResponse userResponse = userService.getUserResponseByUserId(userId);
-        return ResponseEntity.ok().body(userResponse);
+        try {
+            UserResponse userResponse = userService.getUserResponseByUserId(userId);
+            return ResponseEntity.ok().body(userResponse);
+        } catch (BusinessLogicException e) {
+            ExceptionCode exceptionCode = e.getExceptionCode();
+            int status = exceptionCode.getStatus();
+            String message = exceptionCode.getMessage();
+            return ResponseEntity.status(status).body(new UserResponse(message));
+        }
     }
 
     @GetMapping("/response_userByEmail/{email}")

@@ -86,7 +86,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponse getUserResponseByUserId(Long userId) {
-        return userRepository.findUserResponseByUserId(userId);
+        UserResponse userResponse = userRepository.findUserResponseByUserId(userId);
+
+        if (userResponse == null) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+
+        return userResponse;
     }
 
     @Override

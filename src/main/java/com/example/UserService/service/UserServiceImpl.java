@@ -127,10 +127,19 @@ public class UserServiceImpl implements UserService{
     //이메일 인증번호 관련 메소드
     public void sendCodeToEmail(String toEmail) {
         this.checkDuplicatedEmail(toEmail);
-        String title = "STUDIO_i 이메일 인증 번호";
+        String title = "STUDIO_i 회원가입 이메일 인증";
         String authCode = this.createCode();
-        mailService.sendEmail(toEmail, title, authCode);
-        // 이메일 인증 요청 시 인증 번호 Redis에 저장 ( key = "AuthCode " + Email / value = AuthCode )
+
+        // 인증 이메일 내용을 작성
+        String emailContent = "안녕하세요,\n\n";
+        emailContent += "STUDIO_i에서 발송한 이메일 인증 번호는 다음과 같습니다:\n\n";
+        emailContent += "인증 번호: " + authCode + "\n\n";
+        emailContent += "이 인증 번호를 STUDIO_i 웹 사이트 또는 애플리케이션에서 입력하여 이메일을 인증해주세요.\n\n";
+        emailContent += "감사합니다,\nSTUDIO_i 팀";
+
+        mailService.sendEmail(toEmail, title, emailContent);
+
+        // 이메일 인증 요청 시 인증 번호 Redis에 저장( key = "AuthCode " + Email / value = AuthCode )
         redisService.setValues(AUTH_CODE_PREFIX + toEmail,
                 authCode, Duration.ofMillis(this.authCodeExpirationMillis));
     }

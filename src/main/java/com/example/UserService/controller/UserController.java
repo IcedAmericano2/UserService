@@ -12,6 +12,7 @@ import com.example.UserService.vo.RequestUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -92,7 +93,7 @@ public class UserController {
     }
 
     @GetMapping("/emails/verifications")
-    public ResponseEntity verificationEmail(@RequestParam("email") @Valid String email,
+    public ResponseEntity verificationEmail(@RequestParam("email") @Valid @Email String email,
                                             @RequestParam("code") String authCode) {
 
         EmailVerificationResult response = userService.verifiedCode(email, authCode);
